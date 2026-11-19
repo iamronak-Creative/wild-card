@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Wild Card Entry by Kallisto Miorah</title>
+  <link rel="icon" href="assets/icon-white.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="review.css">
+  <script defer src="geometry.js"></script>
+  <script defer src="pulse-cues.js"></script>
+  <script defer src="pulse-score.js"></script>
+  <script defer src="pulse-audio.js"></script>
+  <script defer src="pulse.js"></script>
+  <script defer src="review.js"></script>
+</head>
+<body>
+  <main class="review" aria-label="Wild Card Entry presentation">
+    <div id="stage" class="stage">
+      <section class="slide pulse" id="pulse" aria-labelledby="pulse-title">
+        <h1 class="sr-only" id="pulse-title">Wild Card Entry by Kallisto Miorah</h1>
+        <button type="button" id="pulse-art" class="pulse-art" aria-label="Play Pulse with sound" aria-describedby="pulse-help"></button>
+        <span id="pulse-help" class="sr-only">Click or tap the cover to enable sound. Press Space to pause or resume. Press Right Arrow or swipe left to continue.</span>
+        <p id="pulse-status" class="pulse-status sr-only" role="status"></p>
+      </section>
+
+      <section class="slide opening" id="idea" aria-labelledby="idea-title" hidden>
+        <div class="opening-copy">
+          <h1 id="idea-title">The opening</h1>
+          <p>A precise forward cut. Three bars on one baseline. A shorter center that opens the rhythm.</p>
+        </div>
+        <div class="opening-art">
+          <svg class="opening-diagram" viewBox="-36 -35 414 240" role="img" aria-label="Three white bars lean forward on a shared baseline. The shorter center leaves a space above it.">
+            <g class="diagram-lines" fill="none">
+              <path d="M-24 0H361M-24 181.58H361M150 64.65H220" />
+            </g>
+            <image href="assets/icon-white.svg" width="337.2" height="181.58"/>
+            <path class="diagram-opening" d="M167 41h49" />
+          </svg>
+          <small>65.09° shared lean · center bar 64% of outer height</small>
+        </div>
+      </section>
+
+      <section class="slide opening origin" id="symbol" aria-labelledby="symbol-title" hidden>
+        <div class="opening-copy">
+          <h1 id="symbol-title">From W, C and E</h1>
+          <p>The original hand studies reduce the initials to three forms. The full signature names the host. Once the invitation has done that work, the three bars can stand on their own.</p>
+        </div>
+        <div class="origin-art">
+          <figure><img src="assets/original-sketch.webp" width="758" height="570" alt="The original pencil and ink study labels three slanted shapes W, C and E."><figcaption>Original hand study</figcaption></figure>
+          <div class="origin-marks">
+            <figure><img src="assets/lockup-white.svg" width="386" height="273" alt="Wild Card Entry by Kallisto Miorah"><figcaption>Endorsed signature</figcaption></figure>
+            <figure><img src="assets/icon-white.svg" width="337" height="182" alt="The stand-alone three-bar symbol"><figcaption>Stand-alone symbol</figcaption></figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide opening" id="space" aria-labelledby="space-title" hidden>
+        <div class="opening-copy">
+          <h1 id="space-title">Room to breathe</h1>
+          <p>Reserve one bar’s width on every side. Use the endorsed signature when both the event and its host need to be named.</p>
+        </div>
+        <div class="opening-art">
+          <svg class="space-diagram" viewBox="-85 -85 510 351.58" role="img" aria-label="Each side of the symbol has a clear margin equal to the horizontal width of one bar.">
+            <path fill="#d7ab6b" fill-opacity=".14" fill-rule="evenodd" d="M-73.41-73.41H410.61V254.99H-73.41Z M0 0H337.2V181.58H0Z"/>
+            <g class="diagram-lines" fill="none"><path d="M-73.41-73.41H410.61V254.99H-73.41Z M0 0H337.2V181.58H0Z"/></g>
+            <image href="assets/icon-white.svg" width="337.2" height="181.58"/>
+            <path class="diagram-opening" d="M-73.41 223H0m-73.41-5v10M0 218v10"/>
+            <text x="-37" y="211" text-anchor="middle">1 bar</text>
+          </svg>
+          <small>Minimum widths · symbol 24 px / 8 mm · signature 240 px / 44 mm</small>
+        </div>
+      </section>
+
+      <section class="slide application cut" id="cut" aria-labelledby="cut-title" hidden>
+        <picture>
+          <img src="assets/cut-v3.webp" width="1920" height="1080" alt="Gold raking light shows the three bars pressed into black cloth beside a violet-lit fold.">
+        </picture>
+        <div class="slide-copy"><h1 id="cut-title">The cut</h1><p>Power dressing, after dark.</p></div>
+      </section>
+
+      <section class="slide opening" id="teaser" aria-labelledby="teaser-title" hidden>
+        <div class="opening-copy">
+          <h1 id="teaser-title">A first glimpse</h1>
+          <p>A public teaser introduces the edition. The host shares the invitation and arrival details privately.</p>
+        </div>
+        <div class="teaser-art" aria-label="Public teaser artwork">
+          <strong>The night starts<br>before the door.</strong>
+          <span>Edition 01 / Ahmedabad</span>
+        </div>
+      </section>
+
+      <section class="slide invitation" id="invitation" aria-labelledby="invitation-title" hidden>
+        <picture>
+          <img src="assets/invitation-v3.webp" width="1920" height="1080" alt="A gloved hand presents Mira Mehta’s black invitation, marked in gold, with a gold wax seal and a subtle violet reflection.">
+        </picture>
+        <div class="slide-copy"><h1 id="invitation-title">A personal<br> invitation</h1></div>
+      </section>
+
+      <section class="slide application pass" id="pass" aria-labelledby="pass-title" hidden>
+        <picture>
+          <img src="assets/pass-v3.webp" width="1920" height="1080" alt="A guest in a red sculpted dress holds her engraved gold metal pass in front of amber neon.">
+        </picture>
+        <div class="slide-copy"><h1 id="pass-title">Expected<br class="desktop-break"> by name</h1><p>Your host is waiting for you.</p></div>
+      </section>
+
+      <section class="slide application" id="neon" aria-labelledby="neon-title" hidden>
+        <picture>
+          <img src="assets/neon-v4.webp" width="1920" height="1080" alt="Women in Kallisto Miorah catalogue-inspired looks gather under the gold three-bar sign on the party wall.">
+        </picture>
+        <div class="slide-copy"><h1 id="neon-title">Lit from<br class="desktop-break"> within</h1><p>A gold signature above<br>the dance floor.</p></div>
+      </section>
+
+      <section class="slide image-study" id="light" aria-labelledby="light-title" hidden>
+        <h1 class="sr-only" id="light-title">Light</h1>
+        <picture>
+          <img src="assets/light.webp" width="1920" height="1080" alt="One woman stands in silhouette inside each of three cobalt light forms. One holds a coupe and another sways to the music.">
+        </picture>
+      </section>
+
+      <section class="slide image-study" id="room" aria-labelledby="room-title" hidden>
+        <h1 class="sr-only" id="room-title">The room</h1>
+        <picture>
+          <img src="assets/room-v2.webp" width="1920" height="1080" alt="At an intimate party, two women turn toward each other with drinks as a third dances. The Wild Card Entry symbol is inset in bronze on the DJ booth.">
+        </picture>
+      </section>
+
+      <section class="slide application" id="details" aria-labelledby="details-title" hidden>
+        <picture>
+          <img src="assets/details-v4.webp" width="1920" height="1080" alt="The exact Wild Card Entry mark is inlaid in a black coaster and pressed into a menu beside a ribbed coupe.">
+        </picture>
+        <div class="slide-copy"><h1 id="details-title">At the table</h1><p>The mark becomes a detail worth noticing.</p></div>
+      </section>
+
+      <section class="slide signature closing" id="close" aria-labelledby="close-title" hidden>
+        <h1 class="sr-only" id="close-title">Wild Card Entry by Kallisto Miorah</h1>
+        <img class="signature-mark" src="assets/lockup-white.svg" width="386" height="273" alt="Wild Card Entry by Kallisto Miorah">
+      </section>
+    </div>
+
+    <audio id="pulse-audio" preload="none" loop playsinline src="assets/pulse-loop.mp3"></audio>
+
+    <p id="announce" class="sr-only" role="status"></p>
+  </main>
+</body>
+</html>
