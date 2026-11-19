@@ -157,10 +157,30 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
 .pulse-art, .pulse-art svg { display: block; width: 100%; height: 100%; }
 .pulse-art { padding: 0; border: 0; background: transparent; }
 .pulse-art:focus-visible { outline-offset: -4px; }
-.pulse .pulse-status:not(.sr-only) {
+.pulse-controls {
   position: absolute;
   right: 3%;
   bottom: 4%;
+  display: flex;
+  gap: calc(var(--audio-button-size, 64px) * .2);
+}
+.pulse-controls button {
+  display: grid;
+  place-items: center;
+  width: var(--audio-button-size, 64px);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid #dfbd8370;
+  border-radius: 50%;
+  background: #100b10b3;
+  color: #f1ede4;
+}
+.pulse-controls button:hover { background: #33251a; }
+.pulse-controls svg { width: 46%; height: 46%; }
+.pulse .pulse-status:not(.sr-only) {
+  position: absolute;
+  right: 3%;
+  bottom: calc(4% + var(--audio-button-size, 64px) + 14px);
   max-width: 33%;
   margin: 0;
   padding: .5em .8em;

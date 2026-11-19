@@ -10,6 +10,7 @@
     const {width, height} = review.getBoundingClientRect();
     const scale = Math.min(width / stage.offsetWidth, height / stage.offsetHeight, 1);
     review.style.setProperty('--deck-scale', scale);
+    if (scale > 0) review.style.setProperty('--audio-button-size', Math.max(64, 36 / scale) + 'px');
   }
 
   new ResizeObserver(fitArtboard).observe(review);
@@ -53,7 +54,7 @@
       if (!event.repeat) toggleFullscreen();
       return;
     }
-    if (event.key === ' ' && views[current].id === 'pulse') {
+    if (event.key === ' ' && views[current].id === 'pulse' && !event.target.closest?.('.pulse-controls')) {
       event.preventDefault();
       if (!event.repeat) window.WCEPulse.togglePlayback();
       return;
@@ -88,5 +89,7 @@
   }, {passive: true});
   review.addEventListener('touchcancel', () => { finger = null; });
 
-  syncHash();
+  const navigation = performance.getEntriesByType('navigation')[0];
+  if (navigation?.type === 'reload') show(0, true);
+  else syncHash();
 })();

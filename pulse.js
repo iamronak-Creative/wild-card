@@ -3,6 +3,12 @@
   const cues = window.WCEPulseCues;
   const loop = window.WCEPulseLoop;
   const scene = document.getElementById('pulse-art');
+  const playback = document.getElementById('pulse-playback');
+  const volume = document.getElementById('pulse-volume');
+  const playIcon = playback.querySelector('[data-play]');
+  const pauseIcon = playback.querySelector('[data-pause]');
+  const speakerWaves = volume.querySelector('[data-volume-on]');
+  const speakerMute = volume.querySelector('[data-volume-off]');
   const audio = window.createWCEPulseAudio(document.getElementById('pulse-audio'));
   const status = document.getElementById('pulse-status');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -157,6 +163,17 @@
       playing: audio.muted ? 'Unmute Pulse' : 'Pulse music playing',
       paused: 'Resume Pulse'
     }[mode]);
+    const playing = mode === 'playing';
+    const playbackLabel = playing ? 'Pause music' : 'Play music';
+    const volumeLabel = audio.muted ? 'Unmute music' : 'Mute music';
+    playback.setAttribute('aria-label', playbackLabel);
+    playback.title = playbackLabel;
+    volume.setAttribute('aria-label', volumeLabel);
+    volume.title = volumeLabel;
+    playIcon.toggleAttribute('hidden', playing);
+    pauseIcon.toggleAttribute('hidden', !playing);
+    speakerWaves.toggleAttribute('hidden', audio.muted);
+    speakerMute.toggleAttribute('hidden', !audio.muted);
   }
 
   function redraw() {
@@ -217,7 +234,7 @@
   }
 
   function togglePlayback() {
-    if (mode !== 'playing' || audio.muted) {
+    if (mode !== 'playing') {
       enablePlayback();
       return;
     }
@@ -227,7 +244,15 @@
     redraw();
   }
 
+  function toggleMute() {
+    audio.setMuted(!audio.muted);
+    status.textContent = audio.muted ? 'Pulse muted.' : 'Pulse unmuted.';
+    syncLabel();
+  }
+
   scene.addEventListener('click', enablePlayback);
+  playback.addEventListener('click', togglePlayback);
+  volume.addEventListener('click', toggleMute);
   reduced.addEventListener('change',redraw);
   window.WCEPulse = {
     togglePlayback,
@@ -240,12 +265,7 @@
       redraw();
       begin(true);
     },
-    toggleMute() {
-      if (mode !== 'playing' && mode !== 'paused') return;
-      audio.setMuted(!audio.muted);
-      status.textContent = audio.muted ? 'Pulse muted.' : 'Pulse unmuted.';
-      syncLabel();
-    },
+    toggleMute,
     reset() {
       session += 1;
       active = false;
