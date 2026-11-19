@@ -199,6 +199,22 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   white-space: nowrap;
 }
 
+.review[data-mobile-scroll] {
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y proximity;
+}
+.review[data-mobile-scroll] .stage {
+  position: relative;
+  inset: auto;
+  transform: none;
+  width: min(100%, calc(100dvh * 16 / 9));
+  margin-inline: auto;
+  height: auto;
+  min-height: 100dvh;
+}
+.review[data-mobile-scroll] .slide { height: 100dvh; scroll-snap-align: start; }
+
 @media (max-width: 767px) and (orientation: portrait) {
   .review { overflow-y: auto; overscroll-behavior: contain; }
   .stage {
@@ -210,6 +226,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     min-height: 100dvh;
   }
   .slide { height: auto; min-height: 100dvh; }
+  .review[data-mobile-scroll] .slide { height: auto; }
   .slide :is(h1, .opening-copy h1, .slide-copy h1) {
     font-size: clamp(38px, 10cqw, 62px);
   }

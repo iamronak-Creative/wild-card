@@ -5,8 +5,7 @@
   const announce = document.getElementById('announce');
   const touchPresentation = matchMedia('(pointer: coarse) and (max-width: 950px)');
   let current = -1;
-  let finger = null;
-  let touchStarted = 0;
+  let scrollFrame = 0;
 
   function fitArtboard() {
     const {width, height} = review.getBoundingClientRect();
@@ -18,15 +17,23 @@
   new ResizeObserver(fitArtboard).observe(review);
   fitArtboard();
 
-  function show(index, updateHash) {
-    const wasPulse = views[current]?.id === 'pulse';
+  function select(index) {
+    const previous = views[current];
+    const wasPulse = previous?.id === 'pulse';
     current = Math.max(0, Math.min(views.length - 1, index));
     const active = views[current];
+    previous?.removeAttribute('aria-current');
+    active.setAttribute('aria-current', 'true');
     const isPulse = active.id === 'pulse';
     if (wasPulse && !isPulse) window.WCEPulse.leave(touchPresentation.matches);
-    for (const slide of views) slide.hidden = slide !== active;
-    review.scrollTop = 0;
     if (isPulse && !wasPulse) window.WCEPulse.enter();
+    return active;
+  }
+
+  function show(index, updateHash) {
+    const active = select(index);
+    if (touchPresentation.matches) review.scrollTop = active.offsetTop;
+    else for (const slide of views) slide.hidden = slide !== active;
     announce.textContent = active.querySelector('h1').textContent.replace(/\s+/g, ' ') + '. Slide ' + (current + 1) + ' of ' + views.length + '.';
     if (updateHash) history.replaceState(null, '', '#' + active.id);
   }
@@ -39,6 +46,34 @@
   }
 
   window.addEventListener('hashchange', syncHash);
+
+  function configureNavigation() {
+    const scrolling = touchPresentation.matches;
+    review.toggleAttribute('data-mobile-scroll', scrolling);
+    if (scrolling) {
+      for (const slide of views) slide.hidden = false;
+    } else {
+      review.scrollTop = 0;
+      for (const [index, slide] of views.entries()) slide.hidden = index !== Math.max(0, current);
+    }
+    fitArtboard();
+  }
+
+  touchPresentation.addEventListener('change', () => {
+    configureNavigation();
+    show(current, false);
+  });
+
+  review.addEventListener('scroll', () => {
+    if (!touchPresentation.matches || scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => {
+      scrollFrame = 0;
+      if (!touchPresentation.matches) return;
+      const midpoint = review.scrollTop + review.clientHeight / 2;
+      const index = views.findIndex(slide => slide.offsetTop + slide.offsetHeight > midpoint);
+      if (index >= 0 && index !== current) select(index);
+    });
+  }, {passive: true});
 
   async function toggleFullscreen() {
     if (!document.fullscreenEnabled) return;
@@ -75,36 +110,14 @@
     show(destination, true);
   });
 
-  review.addEventListener('touchstart', event => {
-    finger = event.touches.length === 1 && !event.target.closest('.pulse-controls') ? event.touches[0] : null;
-    touchStarted = event.timeStamp;
-  }, {passive: true});
   review.addEventListener('touchend', event => {
-    if (!finger) return;
-    const dx = event.changedTouches[0].clientX - finger.clientX;
-    const dy = event.changedTouches[0].clientY - finger.clientY;
-    finger = null;
-    const swipe = Math.abs(dx) > 58 && Math.abs(dx) > Math.abs(dy) * 1.5;
-    const tap = touchPresentation.matches && event.timeStamp - touchStarted < 500 &&
-      Math.hypot(dx, dy) < 14 && window.getSelection()?.type !== 'Range';
-    if (swipe || tap) {
-      if (event.cancelable) event.preventDefault();
-      if (touchPresentation.matches) window.WCEPulse.startFromNavigation();
-      show(current + (swipe && dx > 0 ? -1 : 1), true);
+    if (touchPresentation.matches && !event.target.closest('#pulse-volume')) {
+      window.WCEPulse.startFromNavigation();
     }
-  }, {passive: false});
-  review.addEventListener('touchcancel', () => { finger = null; });
+  }, {passive: true});
 
-  review.addEventListener('click', event => {
-    if (!touchPresentation.matches || !event.detail || event.sourceCapabilities?.firesTouchEvents ||
-        event.target.closest('.pulse-controls')) return;
-    if (window.getSelection()?.type === 'Range') return;
-    event.preventDefault();
-    event.stopPropagation();
-    window.WCEPulse.startFromNavigation();
-    show(current + 1, true);
-  }, {capture: true});
-
+  history.scrollRestoration = 'manual';
+  configureNavigation();
   const navigation = performance.getEntriesByType('navigation')[0];
   if (navigation?.type === 'reload') show(0, true);
   else syncHash();
