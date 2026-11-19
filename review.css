@@ -199,3 +199,68 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   white-space: nowrap;
 }
 
+@media (max-width: 767px) and (orientation: portrait) {
+  .review { overflow-y: auto; overscroll-behavior: contain; }
+  .stage {
+    position: relative;
+    inset: auto;
+    transform: none;
+    width: 100%;
+    height: auto;
+    min-height: 100dvh;
+  }
+  .slide { height: auto; min-height: 100dvh; }
+  .slide :is(h1, .opening-copy h1, .slide-copy h1) {
+    font-size: clamp(38px, 10cqw, 62px);
+  }
+  .slide p { margin-top: 14px; font-size: clamp(15px, 4cqw, 20px); }
+
+  .pulse {
+    --audio-button-size: 46px;
+    background-image: linear-gradient(#0b070a38, #0c070966), url("assets/pulse-gold-mobile.webp");
+  }
+  .pulse-art { display: grid; place-items: center; min-height: 100dvh; overflow: hidden; }
+  .pulse-art svg { width: 179%; height: auto; justify-self: center; }
+  .pulse-controls, .pulse .pulse-status:not(.sr-only) { right: max(18px, env(safe-area-inset-right)); }
+  .pulse-controls { bottom: max(20px, calc(env(safe-area-inset-bottom) + 14px)); }
+  .pulse .pulse-status:not(.sr-only) {
+    bottom: max(79px, calc(env(safe-area-inset-bottom) + 70px));
+    max-width: 78%;
+    font-size: 13px;
+  }
+  .signature { --lockup-width: 72%; background-image: url("assets/close-mobile.webp"); }
+  .signature-mark { margin-bottom: 0; }
+
+  .opening {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: clamp(26px, 6cqw, 42px);
+    padding: max(44px, env(safe-area-inset-top)) clamp(22px, 6cqw, 46px) 44px;
+    background: linear-gradient(#0c080ab8, #10091555),
+      url("assets/pulse-gold-mobile.webp") center / cover #100a0b;
+  }
+  .opening-copy, .opening-art, .origin-art { padding: 0; }
+  .opening-art small, .origin-art figcaption { font-size: 12px; }
+  .space-diagram { width: 100%; }
+  .origin-marks { gap: 14px; }
+  .teaser-art { width: min(76%, 360px); padding: 16px; }
+  .teaser-art strong { font-size: clamp(22px, 6cqw, 32px); margin-bottom: 8px; }
+
+  .application, .invitation, .image-study {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #0d080a;
+  }
+  .application > picture, .invitation > picture, .image-study > picture { height: auto; }
+  .application > picture img, .invitation > picture img, .image-study > picture img { height: auto; }
+  .slide .slide-copy {
+    order: -1;
+    position: static;
+    transform: none;
+    max-width: none;
+    padding: 24px 6cqw 22px;
+  }
+  .slide-copy br { display: none; }
+}
+

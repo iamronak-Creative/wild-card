@@ -23,6 +23,7 @@
     const isPulse = active.id === 'pulse';
     if (wasPulse && !isPulse) window.WCEPulse.reset();
     for (const slide of views) slide.hidden = slide !== active;
+    review.scrollTop = 0;
     if (isPulse && !wasPulse) window.WCEPulse.enter();
     announce.textContent = active.querySelector('h1').textContent.replace(/\s+/g, ' ') + '. Slide ' + (current + 1) + ' of ' + views.length + '.';
     if (updateHash) history.replaceState(null, '', '#' + active.id);
