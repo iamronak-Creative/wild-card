@@ -235,21 +235,25 @@
   window.WCEPulse = {
     enter() {
       active = true;
-      mode = 'preview';
       previewOrigin = performance.now();
-      audio.setMuted(false);
       clearStatus();
       redraw();
-      begin(true);
+      if (mode === 'preview') begin(true);
     },
     toggleMute,
-    reset() {
-      session += 1;
+    startFromNavigation() {
+      if (mode !== 'playing') enablePlayback();
+    },
+    leave(keepPlaying) {
       active = false;
-      mode = 'preview';
-      entryEnergy = undefined;
-      autoPending = false;
-      audio.reset();
+      if (!keepPlaying) {
+        session += 1;
+        mode = 'preview';
+        entryEnergy = undefined;
+        autoPending = false;
+        audio.reset();
+        audio.setMuted(false);
+      }
       clearStatus();
       redraw();
     }

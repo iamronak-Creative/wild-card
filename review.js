@@ -3,6 +3,7 @@
   const review = document.querySelector('.review');
   const stage = document.getElementById('stage');
   const announce = document.getElementById('announce');
+  const touchPresentation = matchMedia('(pointer: coarse) and (max-width: 950px)');
   let current = -1;
   let finger = null;
 
@@ -21,7 +22,7 @@
     current = Math.max(0, Math.min(views.length - 1, index));
     const active = views[current];
     const isPulse = active.id === 'pulse';
-    if (wasPulse && !isPulse) window.WCEPulse.reset();
+    if (wasPulse && !isPulse) window.WCEPulse.leave(touchPresentation.matches);
     for (const slide of views) slide.hidden = slide !== active;
     review.scrollTop = 0;
     if (isPulse && !wasPulse) window.WCEPulse.enter();
@@ -74,16 +75,29 @@
   });
 
   review.addEventListener('touchstart', event => {
-    finger = event.touches.length === 1 ? event.touches[0] : null;
+    finger = event.touches.length === 1 && !event.target.closest('.pulse-controls') ? event.touches[0] : null;
   }, {passive: true});
   review.addEventListener('touchend', event => {
     if (!finger) return;
     const dx = event.changedTouches[0].clientX - finger.clientX;
     const dy = event.changedTouches[0].clientY - finger.clientY;
     finger = null;
-    if (Math.abs(dx) > 58 && Math.abs(dx) > Math.abs(dy) * 1.5) show(current + (dx > 0 ? -1 : 1), true);
-  }, {passive: true});
+    if (Math.abs(dx) > 58 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (event.cancelable) event.preventDefault();
+      if (touchPresentation.matches) window.WCEPulse.startFromNavigation();
+      show(current + (dx > 0 ? -1 : 1), true);
+    }
+  }, {passive: false});
   review.addEventListener('touchcancel', () => { finger = null; });
+
+  review.addEventListener('click', event => {
+    if (!touchPresentation.matches || !event.detail || event.target.closest('.pulse-controls')) return;
+    if (window.getSelection()?.type === 'Range') return;
+    event.preventDefault();
+    event.stopPropagation();
+    window.WCEPulse.startFromNavigation();
+    show(current + 1, true);
+  }, {capture: true});
 
   const navigation = performance.getEntriesByType('navigation')[0];
   if (navigation?.type === 'reload') show(0, true);
