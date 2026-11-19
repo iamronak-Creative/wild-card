@@ -6,6 +6,7 @@
   const touchPresentation = matchMedia('(pointer: coarse) and (max-width: 950px)');
   let current = -1;
   let finger = null;
+  let touchStarted = 0;
 
   function fitArtboard() {
     const {width, height} = review.getBoundingClientRect();
@@ -76,22 +77,27 @@
 
   review.addEventListener('touchstart', event => {
     finger = event.touches.length === 1 && !event.target.closest('.pulse-controls') ? event.touches[0] : null;
+    touchStarted = event.timeStamp;
   }, {passive: true});
   review.addEventListener('touchend', event => {
     if (!finger) return;
     const dx = event.changedTouches[0].clientX - finger.clientX;
     const dy = event.changedTouches[0].clientY - finger.clientY;
     finger = null;
-    if (Math.abs(dx) > 58 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    const swipe = Math.abs(dx) > 58 && Math.abs(dx) > Math.abs(dy) * 1.5;
+    const tap = touchPresentation.matches && event.timeStamp - touchStarted < 500 &&
+      Math.hypot(dx, dy) < 14 && window.getSelection()?.type !== 'Range';
+    if (swipe || tap) {
       if (event.cancelable) event.preventDefault();
       if (touchPresentation.matches) window.WCEPulse.startFromNavigation();
-      show(current + (dx > 0 ? -1 : 1), true);
+      show(current + (swipe && dx > 0 ? -1 : 1), true);
     }
   }, {passive: false});
   review.addEventListener('touchcancel', () => { finger = null; });
 
   review.addEventListener('click', event => {
-    if (!touchPresentation.matches || !event.detail || event.target.closest('.pulse-controls')) return;
+    if (!touchPresentation.matches || !event.detail || event.sourceCapabilities?.firesTouchEvents ||
+        event.target.closest('.pulse-controls')) return;
     if (window.getSelection()?.type === 'Range') return;
     event.preventDefault();
     event.stopPropagation();
