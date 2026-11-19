@@ -231,6 +231,13 @@
 
   scene.addEventListener('click', enablePlayback);
   volume.addEventListener('click', toggleMute);
+  volume.addEventListener('touchend', event => {
+    if (!event.cancelable || !volume.contains(document.elementFromPoint(
+      event.changedTouches[0].clientX, event.changedTouches[0].clientY
+    ))) return;
+    event.preventDefault();
+    toggleMute();
+  }, {passive: false});
   reduced.addEventListener('change',redraw);
   window.WCEPulse = {
     enter() {
