@@ -3,10 +3,7 @@
   const cues = window.WCEPulseCues;
   const loop = window.WCEPulseLoop;
   const scene = document.getElementById('pulse-art');
-  const playback = document.getElementById('pulse-playback');
   const volume = document.getElementById('pulse-volume');
-  const playIcon = playback.querySelector('[data-play]');
-  const pauseIcon = playback.querySelector('[data-pause]');
   const speakerWaves = volume.querySelector('[data-volume-on]');
   const speakerMute = volume.querySelector('[data-volume-off]');
   const audio = window.createWCEPulseAudio(document.getElementById('pulse-audio'));
@@ -102,7 +99,6 @@
   let active = false;
   let mode = 'preview';
   let previewOrigin = 0;
-  let position = 0;
   let entryEnergy;
   let latestEnergy;
   let session = 0;
@@ -123,10 +119,10 @@
   }
 
   function draw(now) {
-    const preview = mode === 'preview' || (mode === 'starting' && position === 0);
+    const preview = mode !== 'playing';
     const time = reduced.matches ? cues.poster - loop.offset : preview ?
       Math.max(0, (now - previewOrigin)/1000) % loop.duration :
-      mode === 'playing' ? Math.max(0, audio.time) : position;
+      Math.max(0, audio.time);
     if (mode === 'playing' && time >= .30) entryEnergy = undefined;
     const envelope = [0, 1, 2].map(band => {
       const value = loopEnergy(time, band);
@@ -160,20 +156,14 @@
     scene.setAttribute('aria-label', {
       preview: 'Play Pulse with sound',
       starting: 'Starting Pulse',
-      playing: audio.muted ? 'Unmute Pulse' : 'Pulse music playing',
-      paused: 'Resume Pulse'
+      playing: audio.muted ? 'Unmute Pulse' : 'Pulse music playing'
     }[mode]);
-    const playing = mode === 'playing';
-    const playbackLabel = playing ? 'Pause music' : 'Play music';
-    const volumeLabel = audio.muted ? 'Unmute music' : 'Mute music';
-    playback.setAttribute('aria-label', playbackLabel);
-    playback.title = playbackLabel;
+    const muted = mode !== 'playing' || audio.muted;
+    const volumeLabel = mode === 'playing' ? (muted ? 'Unmute music' : 'Mute music') : 'Enable music';
     volume.setAttribute('aria-label', volumeLabel);
     volume.title = volumeLabel;
-    playIcon.toggleAttribute('hidden', playing);
-    pauseIcon.toggleAttribute('hidden', !playing);
-    speakerWaves.toggleAttribute('hidden', audio.muted);
-    speakerMute.toggleAttribute('hidden', !audio.muted);
+    speakerWaves.toggleAttribute('hidden', muted);
+    speakerMute.toggleAttribute('hidden', !muted);
   }
 
   function redraw() {
@@ -192,22 +182,18 @@
     if (mode === 'starting') return;
     const request = ++session;
     autoPending = automatic;
-    const previous = mode;
-    if (previous !== 'paused') {
-      position = 0;
-      entryEnergy = latestEnergy;
-    }
+    entryEnergy = latestEnergy;
     mode = 'starting';
     clearStatus();
     redraw();
     try {
-      await audio.play(position, automatic);
+      await audio.play(0, automatic);
       if (request !== session) return;
       mode = 'playing';
       redraw();
     } catch {
       if (request !== session) return;
-      mode = previous;
+      mode = 'preview';
       if (!automatic) {
         status.textContent = 'Sound couldn’t start here. Try opening this deck in Chrome.';
         status.classList.remove('sr-only');
@@ -233,29 +219,20 @@
     }
   }
 
-  function togglePlayback() {
+  function toggleMute() {
     if (mode !== 'playing') {
       enablePlayback();
       return;
     }
-    audio.pause();
-    position = audio.time;
-    mode = 'paused';
-    redraw();
-  }
-
-  function toggleMute() {
     audio.setMuted(!audio.muted);
     status.textContent = audio.muted ? 'Pulse muted.' : 'Pulse unmuted.';
     syncLabel();
   }
 
   scene.addEventListener('click', enablePlayback);
-  playback.addEventListener('click', togglePlayback);
   volume.addEventListener('click', toggleMute);
   reduced.addEventListener('change',redraw);
   window.WCEPulse = {
-    togglePlayback,
     enter() {
       active = true;
       mode = 'preview';
@@ -270,7 +247,6 @@
       session += 1;
       active = false;
       mode = 'preview';
-      position = 0;
       entryEnergy = undefined;
       autoPending = false;
       audio.reset();

@@ -54,11 +54,6 @@
       if (!event.repeat) toggleFullscreen();
       return;
     }
-    if (event.key === ' ' && views[current].id === 'pulse' && !event.target.closest?.('.pulse-controls')) {
-      event.preventDefault();
-      if (!event.repeat) window.WCEPulse.togglePlayback();
-      return;
-    }
     if (event.key.toLowerCase() === 'm' && views[current].id === 'pulse') {
       event.preventDefault();
       window.WCEPulse.toggleMute();

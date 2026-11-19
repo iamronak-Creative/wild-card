@@ -11,8 +11,8 @@
   <script defer src="pulse-cues.js"></script>
   <script defer src="pulse-score.js"></script>
   <script defer src="pulse-audio.js"></script>
-  <script defer src="pulse.js?v=2"></script>
-  <script defer src="review.js?v=2"></script>
+  <script defer src="pulse.js?v=3"></script>
+  <script defer src="review.js?v=3"></script>
 </head>
 <body>
   <main class="review" aria-label="Wild Card Entry presentation">
@@ -20,20 +20,16 @@
       <section class="slide pulse" id="pulse" aria-labelledby="pulse-title">
         <h1 class="sr-only" id="pulse-title">Wild Card Entry by Kallisto Miorah</h1>
         <button type="button" id="pulse-art" class="pulse-art" aria-label="Play Pulse with sound" aria-describedby="pulse-help"></button>
-        <div class="pulse-controls" role="group" aria-label="Cover audio">
-          <button type="button" id="pulse-playback" aria-label="Play music" title="Play music">
-            <svg viewBox="0 0 24 24" aria-hidden="true" data-play><path fill="currentColor" d="M8 4.8v14.4L20 12z"/></svg>
-            <svg viewBox="0 0 24 24" aria-hidden="true" data-pause hidden><path fill="currentColor" d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
-          </button>
-          <button type="button" id="pulse-volume" aria-label="Mute music" title="Mute music">
+        <div class="pulse-controls">
+          <button type="button" id="pulse-volume" aria-label="Enable music" title="Enable music">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 9h4l5-4v14l-5-4H3z"/>
-              <path data-volume-on d="M15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/>
-              <path data-volume-off d="m16 9 5 6m0-6-5 6" hidden/>
+              <path data-volume-on d="M15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12" hidden/>
+              <path data-volume-off d="m16 9 5 6m0-6-5 6"/>
             </svg>
           </button>
         </div>
-        <span id="pulse-help" class="sr-only">Use the audio controls or click the cover to enable sound. Press Right Arrow or swipe left to continue.</span>
+        <span id="pulse-help" class="sr-only">Use the speaker icon to enable or mute sound. Press Right Arrow or swipe left to continue.</span>
         <p id="pulse-status" class="pulse-status sr-only" role="status"></p>
       </section>
 
